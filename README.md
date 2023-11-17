@@ -1,4 +1,5 @@
 # app_taskflow
+<<<<<<< HEAD
 
 A new Flutter project.
 
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+Projeto aplicativo Taskflow - disciplina de Desenvolvimento para Dispositivos Móveis
+>>>>>>> 111c1d4096d8e6ca15d69e0784e52684edf863bb
