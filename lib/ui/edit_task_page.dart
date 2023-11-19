@@ -9,7 +9,7 @@ class EditTaskPage extends StatelessWidget {
   late int id;
   late String nome;
   late String descricao;
-  late TaskStatus status;
+  late String status;
 
   EditTaskPage(this.id, this.nome, this.descricao, this.status, {super.key});
 
@@ -31,7 +31,7 @@ class FormEditTaskBody extends StatefulWidget {
   late int id;
   late String nome;
   late String descricao;
-  late TaskStatus status;
+  late String status;
 
   FormEditTaskBody(this.id, this.nome, this.descricao, this.status, {super.key});
 
@@ -46,7 +46,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
   late final int id;
   TextEditingController nomeController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
-  TaskStatus? selectedStatus;
+  TextEditingController statusController = TextEditingController();
 
 
   @override
@@ -55,7 +55,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
     id = widget.id;
     nomeController =  TextEditingController(text: widget.nome);
     descricaoController.text = widget.descricao;
-    selectedStatus = widget.status;
+    statusController.text = widget.status;
     print('Abrindo conexão com BD');
     openDatabase();
   }
@@ -121,7 +121,17 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
                       },
                     ),
                     const SizedBox(height: 10),
-                    Padding(
+                    CustomFormField(
+                      controller: statusController,
+                      labelText: "Status",
+                      validate_function: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Adicione um status';
+                        }
+                        return null;
+                      },
+                    ),
+                    /*Padding(
                       padding: EdgeInsets.all(8.0),
                       child: DropdownButtonFormField<TaskStatus>(
                         value: selectedStatus,
@@ -147,7 +157,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
                           return null;
                         },
                       ),
-                    ),
+                    ),*/
                     const SizedBox(height: 20),
                     TextButton(
                       onPressed: () async {
@@ -156,7 +166,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
                             id: id,
                             nome: nomeController.text,
                             descricao: descricaoController.text,
-                            status: selectedStatus!,
+                            status: statusController.text,
                           );
                           database.taskDao.updateTask(task);
                           Navigator.pop(context, 'listaAtualizada');

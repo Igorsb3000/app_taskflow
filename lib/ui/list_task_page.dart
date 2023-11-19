@@ -4,9 +4,11 @@ import 'package:app_taskflow/ui/edit_task_page.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/database.dart';
+import '../helpers/implementacao_task_repository.dart';
 
 class ListTaskPage extends StatelessWidget {
-  const ListTaskPage({super.key});
+  final ImplementacaoTaskRepository repository;
+  const ListTaskPage({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class ListTaskPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Taskflow"),
       ),
-      body: ListBody(),
+      body: ListBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
@@ -23,7 +25,8 @@ class ListTaskPage extends StatelessWidget {
 
 
 class ListBody extends StatefulWidget {
-  const ListBody({super.key});
+  final ImplementacaoTaskRepository repository;
+  const ListBody({super.key, required this.repository});
 
   @override
   State<ListBody> createState() => _ListBodyState();
@@ -31,22 +34,22 @@ class ListBody extends StatefulWidget {
 
 class _ListBodyState extends State<ListBody> {
   Future<List<Task>> tasks = Future.value([]);
-  late final AppDatabase database;
+  //late final AppDatabase database;
 
   @override
   void initState() {
     super.initState();
     print('Abrindo conexão com BD');
-    openDatabase();
+    //openDatabase();
   }
 
   @override
   void dispose() {
     print('Fechando conexão com BD');
-    closeDatabase();
+    //closeDatabase();
     super.dispose();
   }
-
+/*
   Future<void> openDatabase() async {
     database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     _loadLivros();
@@ -55,16 +58,16 @@ class _ListBodyState extends State<ListBody> {
   Future<void> closeDatabase() async {
     await database.close();
   }
-
+*/
   Future<void> _loadLivros() async {
-    final loadedTasks = await database.taskDao.findAllTasks();
+    final loadedTasks = await widget.repository.findAllTasks();
     setState(() {
       tasks = Future.value(loadedTasks);
     });
   }
 
   void onUpdateList(){
-    openDatabase();
+   // openDatabase();
     _loadLivros();
   }
 
@@ -79,7 +82,7 @@ class _ListBodyState extends State<ListBody> {
             padding: const EdgeInsets.all(10.0),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, i) {
-              return ListItem(task: snapshot.data![i], database: database, onUpdateList: onUpdateList);
+              return ListItem(task: snapshot.data![i], onUpdateList: onUpdateList, repository: widget.repository,);
             },
           )
               : const Center(
@@ -91,10 +94,10 @@ class _ListBodyState extends State<ListBody> {
 }
 
 class ListItem extends StatelessWidget {
-  final AppDatabase database;
+  final ImplementacaoTaskRepository repository;
   final Task task;
   final Function onUpdateList;
-  const ListItem({super.key, required this.task, required this.database, required this.onUpdateList,});
+  const ListItem({super.key, required this.task, required this.onUpdateList, required this.repository,});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +130,7 @@ class ListItem extends StatelessWidget {
             content: Text("${task.nome} foi excluído!"),
           ));
           print("ID da task = ${task.id}");
-          database.taskDao.deleteTask(task);
+          repository.deleteTask(task);
           //livroHelper.deleteLivro(livro.id);
           onUpdateList();
         },

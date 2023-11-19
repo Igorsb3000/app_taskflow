@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Task` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `nome` TEXT NOT NULL, `descricao` TEXT NOT NULL, `status` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Task` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `nome` TEXT NOT NULL, `descricao` TEXT NOT NULL, `status` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -111,7 +111,7 @@ class _$TaskDao extends TaskDao {
                   'id': item.id,
                   'nome': item.nome,
                   'descricao': item.descricao,
-                  'status': item.status.index
+                  'status': item.status
                 }),
         _taskUpdateAdapter = UpdateAdapter(
             database,
@@ -121,7 +121,7 @@ class _$TaskDao extends TaskDao {
                   'id': item.id,
                   'nome': item.nome,
                   'descricao': item.descricao,
-                  'status': item.status.index
+                  'status': item.status
                 }),
         _taskDeletionAdapter = DeletionAdapter(
             database,
@@ -131,7 +131,7 @@ class _$TaskDao extends TaskDao {
                   'id': item.id,
                   'nome': item.nome,
                   'descricao': item.descricao,
-                  'status': item.status.index
+                  'status': item.status
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -153,7 +153,7 @@ class _$TaskDao extends TaskDao {
             id: row['id'] as int?,
             nome: row['nome'] as String,
             descricao: row['descricao'] as String,
-            status: TaskStatus.values[row['status'] as int]),
+            status: row['status'] as String),
         arguments: [id]);
   }
 
@@ -164,12 +164,17 @@ class _$TaskDao extends TaskDao {
             id: row['id'] as int?,
             nome: row['nome'] as String,
             descricao: row['descricao'] as String,
-            status: TaskStatus.values[row['status'] as int]));
+            status: row['status'] as String));
   }
 
   @override
   Future<void> insertTask(Task task) async {
     await _taskInsertionAdapter.insert(task, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertAllTasks(List<Task> tasks) async {
+    await _taskInsertionAdapter.insertList(tasks, OnConflictStrategy.abort);
   }
 
   @override

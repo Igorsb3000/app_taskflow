@@ -1,3 +1,4 @@
+import 'package:app_taskflow/helpers/implementacao_task_repository.dart';
 import 'package:app_taskflow/helpers/task_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:app_taskflow/widgets/custom_form_field.dart';
@@ -7,7 +8,8 @@ import 'package:app_taskflow/domain/task.dart';
 import '../helpers/database.dart';
 
 class RegisterTaskPage extends StatelessWidget {
-  const RegisterTaskPage({super.key});
+  final ImplementacaoTaskRepository repository;
+  const RegisterTaskPage({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +18,15 @@ class RegisterTaskPage extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text("Taskflow"),
           ),
-      body: FormTaskBody(),
+      body: FormTaskBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }
 
 class FormTaskBody extends StatefulWidget {
-  FormTaskBody({super.key});
+  final ImplementacaoTaskRepository repository;
+  FormTaskBody({super.key, required this.repository});
 
   @override
   State<FormTaskBody> createState() => _FormTaskBodyState();
@@ -31,19 +34,21 @@ class FormTaskBody extends StatefulWidget {
 
 class _FormTaskBodyState extends State<FormTaskBody> {
   final _formKey = GlobalKey<FormState>();
-  late final AppDatabase database;
-  TaskStatus? selectedStatus;
+  //late final AppDatabase database;
+  //final ImplementacaoTaskRepository repository = widget.repository;
+  //TaskStatus? selectedStatus;
 
   TextEditingController nomeController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
+  TextEditingController statusController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     print('Abrindo conexão com BD');
-    openDatabase();
+    //openDatabase();
   }
-
+  /*
   Future<void> openDatabase() async {
     database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   }
@@ -51,13 +56,14 @@ class _FormTaskBodyState extends State<FormTaskBody> {
   Future<void> closeDatabase() async {
     await database.close();
   }
+  */
 
   @override
   void dispose() {
     nomeController.dispose();
     descricaoController.dispose();
     print('Fechando conexão com BD');
-    closeDatabase();
+    //closeDatabase();
     super.dispose();
   }
 
@@ -105,7 +111,17 @@ class _FormTaskBodyState extends State<FormTaskBody> {
                       },
                     ),
                     const SizedBox(height: 10),
-                    Padding(
+                    CustomFormField(
+                      controller: statusController,
+                      labelText: "Status",
+                      validate_function: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Adicione um status';
+                        }
+                        return null;
+                      },
+                    ),
+                    /*Padding(
                       padding: EdgeInsets.all(8.0),
                       child: DropdownButtonFormField<TaskStatus>(
                         value: selectedStatus,
@@ -131,7 +147,7 @@ class _FormTaskBodyState extends State<FormTaskBody> {
                           return null;
                         },
                       ),
-                    ),
+                    ),*/
                     const SizedBox(height: 20),
                     TextButton(
                       onPressed: () async {
@@ -140,10 +156,11 @@ class _FormTaskBodyState extends State<FormTaskBody> {
                             id: null,
                             nome: nomeController.text,
                             descricao: descricaoController.text,
-                            status: selectedStatus!,
+                            status: statusController.text,
                           );
                           //livroHelper.saveLivro(l);
-                          database.taskDao.insertTask(task);
+                          //database.taskDao.insertTask(task);
+                          widget.repository.insertTask(task);
                           Navigator.pop(context);
                         }
                       },

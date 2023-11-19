@@ -2,10 +2,12 @@ import 'package:app_taskflow/ui/list_task_page.dart';
 import 'package:app_taskflow/ui/register_task_page.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/implementacao_task_repository.dart';
 import '../helpers/task_dao.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final ImplementacaoTaskRepository repository;
+  const HomePage({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +16,15 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Taskflow"),
       ),
-      body: HomeBody(),
+      body: HomeBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }
 
 class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+  final ImplementacaoTaskRepository repository;
+  const HomeBody({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class HomeBody extends StatelessWidget {
             child: TextButton(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RegisterTaskPage())
+                MaterialPageRoute(builder: (context) => RegisterTaskPage(repository: repository,))
               ),
               child: Text("Cadastrar Tarefa"),
               style: TextButton.styleFrom(
@@ -47,7 +50,7 @@ class HomeBody extends StatelessWidget {
             child: TextButton(
               onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListTaskPage(),)
+                  MaterialPageRoute(builder: (context) => ListTaskPage(repository: repository,),)
               ),
               child: Text("Lista de Tarefas"),
               style: TextButton.styleFrom(

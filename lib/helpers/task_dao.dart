@@ -13,6 +13,9 @@ abstract class TaskDao {
   @insert
   Future<void> insertTask(Task task);
 
+  @insert
+  Future<void> insertAllTasks(List<Task> tasks);
+
   @update
   Future<void> updateTask(Task task);
 

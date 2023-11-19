@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 
 // Enum
-enum TaskStatus { open, inProgress, done }
+// enum TaskStatus { open, inProgress, done }
 
 @entity
 class Task {
@@ -12,11 +12,9 @@ class Task {
 
   final String descricao;
 
-  final TaskStatus status;
-
+  final String status;
 
   Task({required this.id, required this.nome, required this.descricao, required this.status});
-
 
   @override
   String toString() {
