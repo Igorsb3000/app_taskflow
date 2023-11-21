@@ -1,9 +1,7 @@
 import 'package:app_taskflow/domain/task.dart';
-import 'package:app_taskflow/helpers/task_dao.dart';
 import 'package:app_taskflow/ui/edit_task_page.dart';
 import 'package:flutter/material.dart';
 
-import '../helpers/database.dart';
 import '../helpers/implementacao_task_repository.dart';
 
 class ListTaskPage extends StatelessWidget {
@@ -34,32 +32,19 @@ class ListBody extends StatefulWidget {
 
 class _ListBodyState extends State<ListBody> {
   Future<List<Task>> tasks = Future.value([]);
-  //late final AppDatabase database;
 
   @override
   void initState() {
     super.initState();
-    print('Abrindo conexão com BD');
-    //openDatabase();
+    _loadTasks();
   }
 
   @override
   void dispose() {
-    print('Fechando conexão com BD');
-    //closeDatabase();
     super.dispose();
   }
-/*
-  Future<void> openDatabase() async {
-    database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    _loadLivros();
-  }
 
-  Future<void> closeDatabase() async {
-    await database.close();
-  }
-*/
-  Future<void> _loadLivros() async {
+  Future<void> _loadTasks() async {
     final loadedTasks = await widget.repository.findAllTasks();
     setState(() {
       tasks = Future.value(loadedTasks);
@@ -67,8 +52,7 @@ class _ListBodyState extends State<ListBody> {
   }
 
   void onUpdateList(){
-   // openDatabase();
-    _loadLivros();
+    _loadTasks();
   }
 
 
@@ -114,7 +98,8 @@ class ListItem extends StatelessWidget {
                   task.id!,
                   task.nome,
                   task.descricao,
-                  task.status
+                  task.status,
+                  repository
               ),
             ),
           ).then((result) {
@@ -125,13 +110,12 @@ class ListItem extends StatelessWidget {
             }
           });
         },
-        onLongPress: () {
+        onLongPress: () async {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("${task.nome} foi excluído!"),
           ));
           print("ID da task = ${task.id}");
-          repository.deleteTask(task);
-          //livroHelper.deleteLivro(livro.id);
+          await repository.deleteTask(task);
           onUpdateList();
         },
         child: ListTile(

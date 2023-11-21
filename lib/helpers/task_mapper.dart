@@ -12,10 +12,10 @@ class TaskMapper {
 
   Map<String, dynamic> toJson(Task task){
     return {
-      'id': task.id,
-      'nome': task.nome,
-      'descricao': task.nome,
-      'status': task.status,
+      'id':task.id,
+      'nome':task.nome,
+      'descricao':task.descricao,
+      'status':task.status
     };
   }
 }

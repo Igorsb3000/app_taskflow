@@ -1,7 +1,7 @@
 import 'package:app_taskflow/domain/task.dart';
 import 'package:flutter/material.dart';
 
-import '../helpers/database.dart';
+import '../helpers/implementacao_task_repository.dart';
 import '../widgets/custom_form_field.dart';
 
 
@@ -10,8 +10,9 @@ class EditTaskPage extends StatelessWidget {
   late String nome;
   late String descricao;
   late String status;
+  final ImplementacaoTaskRepository repository;
 
-  EditTaskPage(this.id, this.nome, this.descricao, this.status, {super.key});
+  EditTaskPage(this.id, this.nome, this.descricao, this.status, this.repository, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class EditTaskPage extends StatelessWidget {
         title: const Text("Taskflow"),
       ),
       body: FormEditTaskBody(
-          this.id, this.nome, this.descricao, this.status),
+          id, nome, descricao, status, repository),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
@@ -32,8 +33,9 @@ class FormEditTaskBody extends StatefulWidget {
   late String nome;
   late String descricao;
   late String status;
+  final ImplementacaoTaskRepository repository;
 
-  FormEditTaskBody(this.id, this.nome, this.descricao, this.status, {super.key});
+  FormEditTaskBody(this.id, this.nome, this.descricao, this.status, this.repository, {super.key});
 
   @override
   State<FormEditTaskBody> createState() => _FormEditTaskBodyState();
@@ -41,7 +43,6 @@ class FormEditTaskBody extends StatefulWidget {
 
 class _FormEditTaskBodyState extends State<FormEditTaskBody> {
   final _formKey = GlobalKey<FormState>();
-  late final AppDatabase database;
 
   late final int id;
   TextEditingController nomeController = TextEditingController();
@@ -56,25 +57,14 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
     nomeController =  TextEditingController(text: widget.nome);
     descricaoController.text = widget.descricao;
     statusController.text = widget.status;
-    print('Abrindo conexão com BD');
-    openDatabase();
   }
 
   @override
   void dispose() {
     nomeController.dispose();
     descricaoController.dispose();
-    print('Fechando conexão com BD');
-    closeDatabase();
+    statusController.dispose();
     super.dispose();
-  }
-
-  Future<void> openDatabase() async {
-    database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-  }
-
-  Future<void> closeDatabase() async {
-    await database.close();
   }
 
   @override
@@ -85,7 +75,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
         body: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -131,33 +121,6 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
                         return null;
                       },
                     ),
-                    /*Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: DropdownButtonFormField<TaskStatus>(
-                        value: selectedStatus,
-                        onChanged: (TaskStatus? newValue) {
-                          setState(() {
-                            selectedStatus = newValue;
-                          });
-                        },
-                        items: TaskStatus.values.map((TaskStatus status) {
-                          return DropdownMenuItem<TaskStatus>(
-                            value: status,
-                            child: Text(status
-                                .toString()
-                                .split('.')
-                                .last), // Remove o prefixo enum
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(labelText: 'Status'),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Selecione um status.';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),*/
                     const SizedBox(height: 20),
                     TextButton(
                       onPressed: () async {
@@ -168,7 +131,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
                             descricao: descricaoController.text,
                             status: statusController.text,
                           );
-                          database.taskDao.updateTask(task);
+                          widget.repository.updateTask(task);
                           Navigator.pop(context, 'listaAtualizada');
                         }
                       },

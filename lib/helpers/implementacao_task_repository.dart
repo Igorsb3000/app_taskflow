@@ -14,14 +14,20 @@ class ImplementacaoTaskRepository implements InterfaceTaskRepository {
   @override
   Future<List<Task>> findAllTasks() async {
     try {
-      final tasksLocal = await taskDao.findAllTasks();
-      if(tasksLocal.isNotEmpty){
-        return tasksLocal;
-      } else {
-        final tasksApi = await apiClient.getTasksFromApi();
-        await taskDao.insertAllTasks(tasksApi);
-        return tasksApi;
+      final List<Task> tasksLocal = await taskDao.findAllTasks();
+      List<Task> tasksApi;
+      try{
+         tasksApi = await apiClient.getTasksFromApi();
+      } catch(e){
+        print("Erro ao obter dados da API: $e");
+        tasksApi = [];
       }
+      List<int?> listaIdsLocal = tasksLocal.map((task) => task.id).toList();
+      tasksApi.removeWhere((task) => listaIdsLocal.contains(task.id));
+      if(tasksApi.isNotEmpty){
+        taskDao.insertAllTasks(tasksApi);
+      }
+      return await taskDao.findAllTasks();
     } catch (e) {
       throw Exception('Erro ao obter tarefas: $e');
     }
@@ -35,8 +41,8 @@ class ImplementacaoTaskRepository implements InterfaceTaskRepository {
   @override
   Future<void> insertTask(Task task) async {
     try {
-      final novaTask = await apiClient.salvarTaskNaApi(task);
-      await taskDao.insertTask(novaTask);
+      await apiClient.salvarTaskNaApi(task);
+      taskDao.insertTask(task);
     } catch (e) {
       throw Exception('Erro ao salvar tarefa: $e');
     }
@@ -44,21 +50,22 @@ class ImplementacaoTaskRepository implements InterfaceTaskRepository {
 
   @override
   Future<void> updateTask(Task task) async {
-    await taskDao.updateTask(task);
     try {
+      await taskDao.updateTask(task);
+      print("JSON TASK ATUALIZADA = ");
       await apiClient.atualizarTaskNaApi(task.id, TaskMapper().toJson(task));
     } catch (e) {
-      throw Exception('Erro ao atualizar tarefa: $e');
+      throw Exception('Erro ao atualizar tarefa: ${e.toString()}');
     }
   }
 
   @override
   Future<void> deleteTask(Task task) async {
-    await taskDao.deleteTask(task);
     try {
+      await taskDao.deleteTask(task);
       await apiClient.deletarTaskNaApi(task.id);
     } catch (e) {
-      throw Exception('Erro ao atualizar tarefa: $e');
+      throw Exception('Erro ao deletar tarefa: $e');
     }
   }
 

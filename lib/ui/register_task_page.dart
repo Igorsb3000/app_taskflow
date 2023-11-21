@@ -1,11 +1,8 @@
 import 'package:app_taskflow/helpers/implementacao_task_repository.dart';
-import 'package:app_taskflow/helpers/task_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:app_taskflow/widgets/custom_form_field.dart';
 
 import 'package:app_taskflow/domain/task.dart';
-
-import '../helpers/database.dart';
 
 class RegisterTaskPage extends StatelessWidget {
   final ImplementacaoTaskRepository repository;
@@ -26,7 +23,7 @@ class RegisterTaskPage extends StatelessWidget {
 
 class FormTaskBody extends StatefulWidget {
   final ImplementacaoTaskRepository repository;
-  FormTaskBody({super.key, required this.repository});
+  const FormTaskBody({super.key, required this.repository});
 
   @override
   State<FormTaskBody> createState() => _FormTaskBodyState();
@@ -34,9 +31,6 @@ class FormTaskBody extends StatefulWidget {
 
 class _FormTaskBodyState extends State<FormTaskBody> {
   final _formKey = GlobalKey<FormState>();
-  //late final AppDatabase database;
-  //final ImplementacaoTaskRepository repository = widget.repository;
-  //TaskStatus? selectedStatus;
 
   TextEditingController nomeController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
@@ -45,25 +39,12 @@ class _FormTaskBodyState extends State<FormTaskBody> {
   @override
   void initState() {
     super.initState();
-    print('Abrindo conexão com BD');
-    //openDatabase();
   }
-  /*
-  Future<void> openDatabase() async {
-    database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-  }
-
-  Future<void> closeDatabase() async {
-    await database.close();
-  }
-  */
 
   @override
   void dispose() {
     nomeController.dispose();
     descricaoController.dispose();
-    print('Fechando conexão com BD');
-    //closeDatabase();
     super.dispose();
   }
 
@@ -121,33 +102,6 @@ class _FormTaskBodyState extends State<FormTaskBody> {
                         return null;
                       },
                     ),
-                    /*Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: DropdownButtonFormField<TaskStatus>(
-                        value: selectedStatus,
-                        onChanged: (TaskStatus? newValue) {
-                          setState(() {
-                            selectedStatus = newValue;
-                          });
-                        },
-                        items: TaskStatus.values.map((TaskStatus status) {
-                          return DropdownMenuItem<TaskStatus>(
-                            value: status,
-                            child: Text(status
-                                .toString()
-                                .split('.')
-                                .last), // Remove o prefixo enum
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(labelText: 'Status'),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Selecione um status.';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),*/
                     const SizedBox(height: 20),
                     TextButton(
                       onPressed: () async {
@@ -158,8 +112,6 @@ class _FormTaskBodyState extends State<FormTaskBody> {
                             descricao: descricaoController.text,
                             status: statusController.text,
                           );
-                          //livroHelper.saveLivro(l);
-                          //database.taskDao.insertTask(task);
                           widget.repository.insertTask(task);
                           Navigator.pop(context);
                         }

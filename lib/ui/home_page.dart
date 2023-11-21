@@ -1,9 +1,9 @@
+import 'package:app_taskflow/ui/catalog_task_page.dart';
 import 'package:app_taskflow/ui/list_task_page.dart';
 import 'package:app_taskflow/ui/register_task_page.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/implementacao_task_repository.dart';
-import '../helpers/task_dao.dart';
 
 class HomePage extends StatelessWidget {
   final ImplementacaoTaskRepository repository;
@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Taskflow"),
+        title: const Text("Taskflow"),
       ),
       body: HomeBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -39,10 +39,10 @@ class HomeBody extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => RegisterTaskPage(repository: repository,))
               ),
-              child: Text("Cadastrar Tarefa"),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   minimumSize: const Size(150, 50)),
+              child: const Text("Cadastrar Tarefa"),
             ),
           ),
           Padding(
@@ -52,20 +52,23 @@ class HomeBody extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => ListTaskPage(repository: repository,),)
               ),
-              child: Text("Lista de Tarefas"),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   minimumSize: const Size(150, 50)),
+              child: const Text("Lista de Tarefas"),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextButton(
-              onPressed: () => null,
-              child: Text("Catálogo de Tarefas"),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CatalogTaskPage(repository: repository,),)
+              ),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   minimumSize: const Size(150, 50)),
+              child: const Text("Catálogo de Tarefas"),
             ),
           ),
 
