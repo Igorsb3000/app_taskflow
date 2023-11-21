@@ -13,7 +13,7 @@ class RegisterTaskPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text("Taskflow"),
+          title: const Text("Cadastrar Tarefa"),
           ),
       body: FormTaskBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,

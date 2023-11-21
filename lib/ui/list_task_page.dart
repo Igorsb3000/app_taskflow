@@ -13,7 +13,7 @@ class ListTaskPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Taskflow"),
+        title: const Text("Lista de Tarefas"),
       ),
       body: ListBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,

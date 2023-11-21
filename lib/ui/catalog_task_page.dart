@@ -14,7 +14,7 @@ class CatalogTaskPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Catálogo dos livros"),
+        title: const Text("Catálogo de Tarefas"),
       ),
       body: CatalogBody(repository: repository,),
       backgroundColor: Theme.of(context).colorScheme.background,

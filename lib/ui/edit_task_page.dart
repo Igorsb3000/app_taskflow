@@ -19,7 +19,7 @@ class EditTaskPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Taskflow"),
+        title: const Text("Editar Tarefa"),
       ),
       body: FormEditTaskBody(
           id, nome, descricao, status, repository),
