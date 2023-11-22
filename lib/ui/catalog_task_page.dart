@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../domain/task.dart';
 
-
-
 class CatalogTaskPage extends StatelessWidget {
   final ImplementacaoTaskRepository repository;
   const CatalogTaskPage({super.key, required this.repository});

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../helpers/implementacao_task_repository.dart';
 import '../widgets/custom_form_field.dart';
 
-
 class EditTaskPage extends StatelessWidget {
   late int id;
   late String nome;

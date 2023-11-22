@@ -1,17 +1,26 @@
+import 'dart:async';
+
 import 'package:app_taskflow/helpers/implementacao_task_repository.dart';
 import 'package:app_taskflow/ui/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'helpers/api_client.dart';
+import 'helpers/connectivity_service.dart';
 import 'helpers/database.dart';
 
 
 void main() {
-  runApp(const MyAppWrapper());
+  WidgetsFlutterBinding.ensureInitialized();
+  final ConnectivityService connectivityService = ConnectivityService();
+  connectivityService.initConnectivity();
+  connectivityService.startListening();
+
+  runApp(MyAppWrapper(connectivityService: connectivityService,));
 }
 
 class MyAppWrapper extends StatefulWidget {
-  const MyAppWrapper({super.key});
+  final ConnectivityService connectivityService;
+  const MyAppWrapper({super.key, required this.connectivityService});
 
   @override
   _MyAppWrapperState createState() => _MyAppWrapperState();
@@ -26,9 +35,15 @@ class _MyAppWrapperState extends State<MyAppWrapper> {
     initializeDatabase();
   }
 
+  @override
+  void dispose(){
+    super.dispose();
+  }
+
+
   Future<void> initializeDatabase() async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    repository = ImplementacaoTaskRepository(taskDao: database.taskDao, apiClient: ApiClient());
+    repository = ImplementacaoTaskRepository(taskDao: database.taskDao, apiClient: ApiClient(), connectivityService: widget.connectivityService);
     setState(() {});
   }
 

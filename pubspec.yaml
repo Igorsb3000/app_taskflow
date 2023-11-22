@@ -39,6 +39,7 @@ dependencies:
   sqflite: ^2.3.0
   path: ^1.8.3
   flutter_rating_bar: ^4.0.1
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   floor_generator: ^1.4.2
