@@ -1,8 +1,5 @@
 import 'package:floor/floor.dart';
 
-// Enum
-// enum TaskStatus { open, inProgress, done }
-
 @entity
 class Task {
   @PrimaryKey(autoGenerate: true)

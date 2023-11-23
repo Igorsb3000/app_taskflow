@@ -1,11 +1,11 @@
-import 'package:app_taskflow/domain/task.dart';
-import 'package:app_taskflow/helpers/interface_task_repository.dart';
-import 'package:app_taskflow/helpers/task_dao.dart';
-import 'package:app_taskflow/helpers/task_mapper.dart';
+import 'package:app_taskflow/model/task.dart';
+import 'package:app_taskflow/data/repository/interface_task_repository.dart';
+import 'package:app_taskflow/data/dao/task_dao.dart';
+import 'package:app_taskflow/data/mapper/task_mapper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import 'api_client.dart';
-import 'connectivity_service.dart';
+import '../api/api_client.dart';
+import '../api/connectivity_service.dart';
 
 class ImplementacaoTaskRepository implements InterfaceTaskRepository {
   final TaskDao taskDao;
@@ -15,6 +15,7 @@ class ImplementacaoTaskRepository implements InterfaceTaskRepository {
 
   @override
   Future<List<Task>> findAllTasks() async {
+    print('Obtendo tasks Locais...');
     final List<Task> tasksLocal = await taskDao.findAllTasks();
 
     if (connectivityService.getConnectionStatus() == ConnectivityResult.mobile ||

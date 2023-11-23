@@ -1,4 +1,4 @@
-import '../domain/task.dart';
+import '../../model/task.dart';
 
 class TaskMapper {
   Task fromJson(Map<String, dynamic> json){

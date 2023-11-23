@@ -1,17 +1,17 @@
-import 'package:app_taskflow/domain/task.dart';
+import 'package:app_taskflow/model/task.dart';
 import 'package:flutter/material.dart';
 
-import '../helpers/implementacao_task_repository.dart';
+import '../controller/task_controller.dart';
 import '../widgets/custom_form_field.dart';
 
 class EditTaskPage extends StatelessWidget {
-  late int id;
-  late String nome;
-  late String descricao;
-  late String status;
-  final ImplementacaoTaskRepository repository;
+  final int id;
+  final String nome;
+  final String descricao;
+  final String status;
+  final TaskController taskController;
 
-  EditTaskPage(this.id, this.nome, this.descricao, this.status, this.repository, {super.key});
+  const EditTaskPage(this.id, this.nome, this.descricao, this.status, this.taskController, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +21,20 @@ class EditTaskPage extends StatelessWidget {
         title: const Text("Editar Tarefa"),
       ),
       body: FormEditTaskBody(
-          id, nome, descricao, status, repository),
+          id, nome, descricao, status, taskController),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }
 
 class FormEditTaskBody extends StatefulWidget {
-  late int id;
-  late String nome;
-  late String descricao;
-  late String status;
-  final ImplementacaoTaskRepository repository;
+  final int id;
+  final String nome;
+  final String descricao;
+  final String status;
+  final TaskController taskController;
 
-  FormEditTaskBody(this.id, this.nome, this.descricao, this.status, this.repository, {super.key});
+  const FormEditTaskBody(this.id, this.nome, this.descricao, this.status, this.taskController, {super.key});
 
   @override
   State<FormEditTaskBody> createState() => _FormEditTaskBodyState();
@@ -130,7 +130,7 @@ class _FormEditTaskBodyState extends State<FormEditTaskBody> {
                             descricao: descricaoController.text,
                             status: statusController.text,
                           );
-                          widget.repository.updateTask(task);
+                          widget.taskController.updateTask(task);
                           Navigator.pop(context, 'listaAtualizada');
                         }
                       },

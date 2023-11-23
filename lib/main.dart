@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:app_taskflow/helpers/implementacao_task_repository.dart';
+import 'package:app_taskflow/data/repository/implementacao_task_repository.dart';
 import 'package:app_taskflow/ui/home_page.dart';
 import 'package:flutter/material.dart';
 
-import 'helpers/api_client.dart';
-import 'helpers/connectivity_service.dart';
-import 'helpers/database.dart';
+import 'data/api/api_client.dart';
+import 'data/api/connectivity_service.dart';
+import 'data/database/database.dart';
+import 'controller/task_controller.dart';
 
 
 void main() {
@@ -28,6 +29,7 @@ class MyAppWrapper extends StatefulWidget {
 
 class _MyAppWrapperState extends State<MyAppWrapper> {
   ImplementacaoTaskRepository? repository;
+  TaskController? taskController;
 
   @override
   void initState() {
@@ -39,17 +41,21 @@ class _MyAppWrapperState extends State<MyAppWrapper> {
   void dispose(){
     super.dispose();
   }
-
-
   Future<void> initializeDatabase() async {
     final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    repository = ImplementacaoTaskRepository(taskDao: database.taskDao, apiClient: ApiClient(), connectivityService: widget.connectivityService);
+    final ImplementacaoTaskRepository repository = ImplementacaoTaskRepository(
+      taskDao: database.taskDao,
+      apiClient: ApiClient(),
+      connectivityService: widget.connectivityService,
+    );
+
+    taskController = TaskController(repository: repository);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (repository == null) {
+    if (taskController == null) {
       return CircularProgressIndicator(); // ou um loading
     } else {
       return MaterialApp(
@@ -71,7 +77,7 @@ class _MyAppWrapperState extends State<MyAppWrapper> {
             ),
           ),
         ),
-        home: repository != null ? HomePage(repository: repository!) : Container(),
+        home: HomePage(taskController: taskController!),
       );
     }
   }

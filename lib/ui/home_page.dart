@@ -3,11 +3,11 @@ import 'package:app_taskflow/ui/list_task_page.dart';
 import 'package:app_taskflow/ui/register_task_page.dart';
 import 'package:flutter/material.dart';
 
-import '../helpers/implementacao_task_repository.dart';
+import '../controller/task_controller.dart';
 
 class HomePage extends StatelessWidget {
-  final ImplementacaoTaskRepository repository;
-  const HomePage({super.key, required this.repository});
+  final TaskController taskController;
+  const HomePage({super.key, required this.taskController});
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,16 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Taskflow"),
       ),
-      body: HomeBody(repository: repository,),
+      body: HomeBody(taskController: taskController,),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }
 
 class HomeBody extends StatelessWidget {
-  final ImplementacaoTaskRepository repository;
-  const HomeBody({super.key, required this.repository});
+  //final ImplementacaoTaskRepository repository;
+  final TaskController taskController;
+  const HomeBody({super.key, required this.taskController});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class HomeBody extends StatelessWidget {
             child: TextButton(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RegisterTaskPage(repository: repository,))
+                MaterialPageRoute(builder: (context) => RegisterTaskPage(taskController: taskController,))
               ),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -50,7 +51,7 @@ class HomeBody extends StatelessWidget {
             child: TextButton(
               onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListTaskPage(repository: repository,),)
+                  MaterialPageRoute(builder: (context) => ListTaskPage(taskController: taskController,),)
               ),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -63,7 +64,7 @@ class HomeBody extends StatelessWidget {
             child: TextButton(
               onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CatalogTaskPage(repository: repository,),)
+                  MaterialPageRoute(builder: (context) => CatalogTaskPage(taskController: taskController,),)
               ),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,

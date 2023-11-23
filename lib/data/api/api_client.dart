@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:app_taskflow/helpers/task_mapper.dart';
+import 'package:app_taskflow/data/mapper/task_mapper.dart';
 import 'package:http/http.dart' as http;
 
-import '../domain/task.dart';
+import '../../model/task.dart';
 
 class ApiClient {
   final String baseUrl = 'http://5.161.191.148:8081/api/tarefas';
 
   Future<List<Task>> getTasksFromApi() async {
     final response = await http.get(
-      Uri.parse('$baseUrl'),
+      Uri.parse(baseUrl),
     );
     if(response.statusCode == 200){
       Map<String, dynamic> jsonMap = json.decode(response.body);
@@ -25,7 +25,7 @@ class ApiClient {
 
   Future<void> salvarTaskNaApi(Task task) async {
     final response = await http.post(
-        Uri.parse('$baseUrl'),
+        Uri.parse(baseUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
@@ -47,7 +47,7 @@ class ApiClient {
       },
       body: jsonEncode(novaTask),
     );
-    print("${jsonEncode(novaTask)}");
+    print(jsonEncode(novaTask));
     if (response.statusCode == 204) {
       print("Task ATUALIZADA na API com sucesso!");
     } else {
@@ -66,7 +66,5 @@ class ApiClient {
       throw Exception('Falha ao deletar Tarefa');
     }
   }
-
-
 
 }

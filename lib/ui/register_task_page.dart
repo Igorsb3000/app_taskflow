@@ -1,12 +1,13 @@
-import 'package:app_taskflow/helpers/implementacao_task_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:app_taskflow/widgets/custom_form_field.dart';
 
-import 'package:app_taskflow/domain/task.dart';
+import 'package:app_taskflow/model/task.dart';
+
+import '../controller/task_controller.dart';
 
 class RegisterTaskPage extends StatelessWidget {
-  final ImplementacaoTaskRepository repository;
-  const RegisterTaskPage({super.key, required this.repository});
+  final TaskController taskController;
+  const RegisterTaskPage({super.key, required this.taskController});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +16,15 @@ class RegisterTaskPage extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text("Cadastrar Tarefa"),
           ),
-      body: FormTaskBody(repository: repository,),
+      body: FormTaskBody(taskController: taskController,),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }
 
 class FormTaskBody extends StatefulWidget {
-  final ImplementacaoTaskRepository repository;
-  const FormTaskBody({super.key, required this.repository});
+  final TaskController taskController;
+  const FormTaskBody({super.key, required this.taskController});
 
   @override
   State<FormTaskBody> createState() => _FormTaskBodyState();
@@ -56,7 +57,7 @@ class _FormTaskBodyState extends State<FormTaskBody> {
         body: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -112,7 +113,7 @@ class _FormTaskBodyState extends State<FormTaskBody> {
                             descricao: descricaoController.text,
                             status: statusController.text,
                           );
-                          widget.repository.insertTask(task);
+                          widget.taskController.addTask(task);
                           Navigator.pop(context);
                         }
                       },

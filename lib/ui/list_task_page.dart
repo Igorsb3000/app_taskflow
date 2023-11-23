@@ -1,12 +1,12 @@
-import 'package:app_taskflow/domain/task.dart';
+import 'package:app_taskflow/model/task.dart';
 import 'package:app_taskflow/ui/edit_task_page.dart';
 import 'package:flutter/material.dart';
 
-import '../helpers/implementacao_task_repository.dart';
+import '../controller/task_controller.dart';
 
 class ListTaskPage extends StatelessWidget {
-  final ImplementacaoTaskRepository repository;
-  const ListTaskPage({super.key, required this.repository});
+  final TaskController taskController;
+  const ListTaskPage({super.key, required this.taskController});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class ListTaskPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Lista de Tarefas"),
       ),
-      body: ListBody(repository: repository,),
+      body: ListBody(taskController: taskController,),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
@@ -23,8 +23,9 @@ class ListTaskPage extends StatelessWidget {
 
 
 class ListBody extends StatefulWidget {
-  final ImplementacaoTaskRepository repository;
-  const ListBody({super.key, required this.repository});
+  final TaskController taskController;
+  const ListBody({super.key, required this.taskController});
+  static const maxLength = 15;
 
   @override
   State<ListBody> createState() => _ListBodyState();
@@ -45,7 +46,7 @@ class _ListBodyState extends State<ListBody> {
   }
 
   Future<void> _loadTasks() async {
-    final loadedTasks = await widget.repository.findAllTasks();
+    final loadedTasks = await widget.taskController.getAllTasks();
     setState(() {
       tasks = Future.value(loadedTasks);
     });
@@ -62,12 +63,15 @@ class _ListBodyState extends State<ListBody> {
       FutureBuilder(
         future: tasks,
         builder: (context, snapshot) {
-          return snapshot.hasData  ? ListView.builder(
+          return snapshot.hasData  ? ListView(
+            shrinkWrap: true,
             padding: const EdgeInsets.all(10.0),
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, i) {
-              return ListItem(task: snapshot.data![i], onUpdateList: onUpdateList, repository: widget.repository,);
-            },
+            children: [
+              DataTable(
+                columns: _createTaskTableColumns(),
+                rows: _createTaskTableRows(snapshot.data ?? []),
+              ),
+            ],
           )
               : const Center(
             child: CircularProgressIndicator(),
@@ -75,53 +79,68 @@ class _ListBodyState extends State<ListBody> {
         },
       );
   }
-}
+  List<DataColumn> _createTaskTableColumns() {
+    return const [
+      DataColumn(label: Text('ID')),
+      DataColumn(label: Text('Nome')),
+      DataColumn(label: Text('Ações')),
+    ];
+  }
 
-class ListItem extends StatelessWidget {
-  final ImplementacaoTaskRepository repository;
-  final Task task;
-  final Function onUpdateList;
-  const ListItem({super.key, required this.task, required this.onUpdateList, required this.repository,});
-
-  @override
-  Widget build(BuildContext context) {
-    return
-      GestureDetector(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Editar tarefa!"),
-          ));
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditTaskPage(
-                  task.id!,
-                  task.nome,
-                  task.descricao,
-                  task.status,
-                  repository
-              ),
-            ),
-          ).then((result) {
-            // Esta função será chamada após o Navigator.pop na tela de destino
-            if (result != null && result is String && result == 'listaAtualizada') {
-              // Atualize sua lista aqui chamando a função de callback
+  List<DataRow> _createTaskTableRows(List<Task> tasks) {
+    return tasks
+        .map((task) => DataRow(cells: [
+      DataCell(Text('#${task.id}'),),
+      DataCell(
+        Text(task.nome.length > ListBody.maxLength
+              ? '${task.nome.substring(0, ListBody.maxLength)}...' // Limitando a quantidade de caracteres
+              : task.nome,),
+      ),
+    DataCell(
+      Row(children: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Editar tarefa!"),
+              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditTaskPage(
+                      task.id!,
+                      task.nome,
+                      task.descricao,
+                      task.status,
+                      widget.taskController
+                  ),
+                ),
+              ).then((result) {
+                // Esta função será chamada após o Navigator.pop na tela de destino
+                if (result != null && result is String && result == 'listaAtualizada') {
+                  // Atualize sua lista aqui chamando a função de callback
+                  onUpdateList();
+                }
+              });
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("${task.nome} foi excluído!"),
+              ));
+              await widget.taskController.deleteTask(task);
               onUpdateList();
-            }
-          });
-        },
-        onLongPress: () async {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("${task.nome} foi excluído!"),
-          ));
-          print("ID da task = ${task.id}");
-          await repository.deleteTask(task);
-          onUpdateList();
-        },
-        child: ListTile(
-          title: Text(task.nome),
+            },
+          ),
+        ],
         ),
-      );
+
+    ),
+    ]))
+        .toList();
   }
 }
+
 

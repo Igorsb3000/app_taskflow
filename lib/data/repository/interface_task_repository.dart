@@ -1,5 +1,4 @@
-
-import 'package:app_taskflow/domain/task.dart';
+import 'package:app_taskflow/model/task.dart';
 
 abstract class InterfaceTaskRepository {
   Future<List<Task>> findAllTasks();
