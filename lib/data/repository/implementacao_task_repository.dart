@@ -69,8 +69,7 @@ class ImplementacaoTaskRepository implements InterfaceTaskRepository {
       await taskDao.updateTask(task);
       final List<Task> tasksLocal = await taskDao.findAllTasks();
 
-      if (connectivityService.getConnectionStatus() ==
-          ConnectivityResult.mobile ||
+      if (connectivityService.getConnectionStatus() == ConnectivityResult.mobile ||
           connectivityService.getConnectionStatus() == ConnectivityResult.wifi) {
 
         List<Task> tasksApi;

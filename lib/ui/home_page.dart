@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Taskflow"),
+        title: const Center(child: Text("Taskflow"),),
       ),
       body: HomeBody(taskController: taskController,),
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -23,7 +23,6 @@ class HomePage extends StatelessWidget {
 }
 
 class HomeBody extends StatelessWidget {
-  //final ImplementacaoTaskRepository repository;
   final TaskController taskController;
   const HomeBody({super.key, required this.taskController});
 

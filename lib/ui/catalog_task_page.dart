@@ -23,7 +23,6 @@ class CatalogTaskPage extends StatelessWidget {
 }
 
 class CatalogBody extends StatefulWidget {
-  //final ImplementacaoTaskRepository repository;
   final TaskController taskController;
   const CatalogBody({super.key, required this.taskController});
 

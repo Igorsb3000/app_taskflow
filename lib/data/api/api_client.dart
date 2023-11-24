@@ -13,7 +13,7 @@ class ApiClient {
       Uri.parse(baseUrl),
     );
     if(response.statusCode == 200){
-      Map<String, dynamic> jsonMap = json.decode(response.body);
+      Map<String, dynamic> jsonMap = json.decode(utf8.decode(response.bodyBytes));
       List<Map<String, dynamic>> listaContent = List<Map<String, dynamic>>.from(jsonMap['content']);
       List<Task> listaDeTasks = listaContent.map((task) => TaskMapper().fromJson(task)).toList();
       print("Lista de Tasks RECARREGADA com sucesso!");
