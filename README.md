@@ -21,30 +21,66 @@
   <h2>Funcionalidades do Projeto</h2>
   <p>
     Este app possui as seguintes funcionalidades:
-    <li><strong>Cadastrar tarefa</strong> (realiza o cadastro de uma tarefa, que por sua vez possui os campos Nome, Descrição e Status);</li>
-    <li><strong>Listar tarefas</strong> (busca as tarefas tanto no banco local quanto na API);</li>
-    <li><strong>Editar tarefa</strong> (faz a atualização tanto no banco local quanto na API);</li>
-    <li><strong>Excluir tarefa</strong> (faz a exclusão tanto no banco local quanto na API);</li>
-    <li><strong>Exibir tarefas em forma de catálogo</strong> (busca as tarefas tanto no banco local quanto na API);</li>
+    <ul>
+      <li><strong>Cadastrar tarefa</strong> (realiza o cadastro de uma tarefa, que por sua vez possui os campos Nome, Descrição e Status);</li>
+      <li><strong>Listar tarefas</strong> (busca as tarefas tanto no banco local quanto na API);</li>
+      <li><strong>Editar tarefa</strong> (faz a atualização tanto no banco local quanto na API);</li>
+      <li><strong>Excluir tarefa</strong> (faz a exclusão tanto no banco local quanto na API);</li>
+      <li><strong>Exibir tarefas em forma de catálogo</strong> (busca as tarefas tanto no banco local quanto na API);</li>
+    </ul>
   </p>
   
   <br>
 
   <h2>Tecnologias Utilizadas</h2>
   <p>
-    <li>Framework Flutter;</li>
-    <li>Linguagem Dart;</li>
-    <li>SQLite;</li>
-    <li>Biblioteca connectivity_plus (https://pub.dev/packages/connectivity_plus);</li>
-    <li>Biblioteca floor (https://pub.dev/packages/floor);</li>
+    <ul>
+      <li>Framework Flutter;</li>
+      <li>Linguagem Dart;</li>
+      <li>SQLite;</li>
+      <li>Biblioteca connectivity_plus (https://pub.dev/packages/connectivity_plus);</li>
+      <li>Biblioteca floor (https://pub.dev/packages/floor);</li>
+    </ul>
   </p>
 
   <br>
 
   <h2>Autores</h2>
-  <p><li>Igor Silva Bento - Github: https://github.com/Igorsb3000 Linkedin: https://www.linkedin.com/in/igor-silva-bento-7542004a/</li></p>
-  <p><li>Dawerton Eduardo Carlos Vaz - Github: https://github.com/eduardocvaz Linkedin: https://www.linkedin.com/in/eduardo-c-vaz/</li></p>
-  <p><li>Ricardo Julio da Silva Carvalho - Github: https://github.com/ricardoufrn Linkedin: https://www.linkedin.com/in/igor-silva-bento-7542004a/</li></p>
-  <p><li>Alex Pereira Barros</li></p>
+  <p>
+    <ul>
+      <li>
+        Igor Silva Bento
+        <ul>
+          <li>Github: https://github.com/Igorsb3000</li>
+          <li>Linkedin: https://www.linkedin.com/in/igor-silva-bento-7542004a/</li>
+        </ul>
+      </li>
+    </ul>
+  </p>
+  <p>
+    <ul>
+      <li>
+        Dawerton Eduardo Carlos Vaz
+        <ul>
+          <li>Github: https://github.com/eduardocvaz</li>
+          <li>Linkedin: https://www.linkedin.com/in/eduardo-c-vaz/</li>
+        </ul>
+      </li>
+    </ul>
+  </p>
+  <p>
+    <ul>
+      <li>
+        Ricardo Julio da Silva Carvalho
+        <ul>
+          <li>Github: https://github.com/ricardoufrn</li>
+        </ul>
+      </li>
+    </ul>
+  </p>
+  <p>
+    <li>Alex Pereira Barros
+    </li>
+  </p>
 
 </html>
