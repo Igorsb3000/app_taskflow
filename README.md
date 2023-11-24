@@ -1,6 +1,6 @@
 <html>
   <h1 align="center"> App Taskflow </h1>
-  <p>
+  <p align="center">
     <img alt="Static Badge" src="https://img.shields.io/badge/Flutter-3.13.9-75c201">
     <img alt="Static Badge" src="https://img.shields.io/badge/Dart-3.1.5-0175C2">
     <img alt="Static Badge" src="https://img.shields.io/badge/Floor-1.4.2-c24e01">
